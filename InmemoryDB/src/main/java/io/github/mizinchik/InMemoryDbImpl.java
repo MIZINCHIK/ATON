@@ -61,28 +61,33 @@ public class InMemoryDbImpl implements InMemoryDb {
 
     @Override
     public void changeEntry(Person person, Person newPerson) {
-        boolean exists = deleteEntry(person);
-        if (exists) {
+        if (deleteEntry(person)) {
             addEntry(newPerson);
         }
     }
 
     @Override
     public void changeEntry(Person person, Long newAccount) {
-        Person newPerson = new Person(newAccount, person.getName(), person.getValue());
-        changeEntry(person, newPerson);
+        if (deleteEntry(person)) {
+            person.setAccount(newAccount);
+            addEntry(person);
+        }
     }
 
     @Override
     public void changeEntry(Person person, String newName) {
-        Person newPerson = new Person(person.getAccount(), newName, person.getValue());
-        changeEntry(person, newPerson);
+        if (deleteEntry(person)) {
+            person.setName(newName);
+            addEntry(person);
+        }
     }
 
     @Override
     public void changeEntry(Person person, Double newValue) {
-        Person newPerson = new Person(person.getAccount(), person.getName(), newValue);
-        changeEntry(person, newPerson);
+        if (deleteEntry(person)) {
+            person.setValue(newValue);
+            addEntry(person);
+        }
     }
 
     @Override
